@@ -1,0 +1,113 @@
+'''
+Proyecto integrador parte 4
+
+1. Implementar una función que reciba el mapa de un laberinto en forma de cadena, y lo convierta a matriz 
+de caracteres.
+    1. Utiliza el siguiente mapa:
+
+        laberinto = """..###################
+        ....#...............#
+        #.#.#####.#########.#
+        #.#...........#.#.#.#
+        #.#####.#.###.#.#.#.#
+        #...#.#.#.#.....#...#
+        #.#.#.#######.#.#####
+        #.#...#.....#.#...#.#
+        #####.#####.#.#.###.#
+        #.#.#.#.......#...#.#
+        #.#.#.#######.#####.#
+        #...#...#...#.#.#...#
+        ###.#.#####.#.#.###.#
+        #.#...#.......#.....#
+        #.#.#.###.#.#.###.#.#
+        #...#.#...#.#.....#.#
+        ###.#######.###.###.#
+        #.#.#.#.#.#...#.#...#
+        #.#.#.#.#.#.#.#.#.#.#
+        #.....#.....#.#.#.#.#
+        ###################.."""
+
+    2. Los puntos inicial y final deben ser dados al crear el juego, usar las coordenadas (0,0) para el inicio 
+    y (len(mapa)-1, len(mapa[0])-1) para el final.
+    3. Recuerdo: Para separar por filas usar split("\n") y para convertir una cadena a una lista de caracteres 
+    usar list(cadena).
+
+2. Escribir una función que limpie la pantalla y muestre la matriz (recibe el mapa en forma de matriz)
+3. Implementar el main loop en una función (recibe el mapa en forma de matriz)
+
+    .recibir: mapa List[List[str]], posicion inicial Tuple[int, int], posicion final Tuple[int, int].
+    .definir dos variavles px y py que contienen las coordenadas del jugador, iniciar como los valores 
+    de la posición incial
+    .procesar mientras (px, py) no coincida con la coordenada final.
+        a. asignar el caracter P en el mapa a las coordenadas (px, py) en todo momento.
+        b. leer del teclado las teclas de flechas, antes de actualizar la posición, verificar si esta posición 
+            tentativa:
+            a. No se sale del mapa
+            b. No es una pared
+        c. Si la nueva posición es válida, actualizar (px, py), poner el caracter P en esta nueva coordenada y 
+            restaurar la anterior a .
+        d. mostrar
+
+
+'''
+import os
+import readchar
+import keyboard
+def convertir_mapa(laberinto):
+    return [list(fila) for fila in laberinto.split("\n")]
+
+def limpiar_pantalla():
+  os.system("cls")
+
+def mostrar_mapa(mapa):
+
+  for fila in mapa:
+    print("".join(fila))
+
+def main_loop(mapa, posicion_inicial, posicion_final):
+  px, py = posicion_inicial
+  while (px, py) != posicion_final:
+    limpiar_pantalla()
+    mapa[px][py] = "P"
+    mostrar_mapa(mapa)
+    mapa[px][py] = "."
+    
+    tecla = readchar.readkey()
+       
+    if tecla == "w":
+      px = max(0, px - 1)
+    elif tecla == "s":
+      px = min(len(mapa) - 1, px + 1)
+    elif tecla == "a":
+      py = max(0, py - 1)
+    elif tecla == "d":
+      py = min(len(mapa[0]) - 1, py + 1)
+
+
+
+laberinto = """..###################
+....#...............#
+#.#.#####.#########.#
+#.#...........#.#.#.#
+#.#####.#.###.#.#.#.#
+#...#.#.#.#.....#...#
+#.#.#.#######.#.#####
+#.#...#.....#.#...#.#
+#####.#####.#.#.###.#
+#.#.#.#.......#...#.#
+#.#.#.#######.#####.#
+#...#...#...#.#.#...#
+###.#.#####.#.#.###.#
+#.#...#.......#.....#
+#.#.#.###.#.#.###.#.#
+#...#.#...#.#.....#.#
+###.#######.###.###.#
+#.#.#.#.#.#...#.#...#
+#.#.#.#.#.#.#.#.#.#.#
+#.....#.....#.#.#.#.#
+###################.."""
+
+mapa = convertir_mapa(laberinto)
+posicion_inicial = (0, 0)
+posicion_final = (len(mapa) - 1, len(mapa[0]) - 1)
+main_loop(mapa, posicion_inicial, posicion_final)
